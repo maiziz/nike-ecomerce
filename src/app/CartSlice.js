@@ -53,7 +53,8 @@ const CartSlice = createSlice({
 
       if (itemIndex >= 0) {
         state.cartItems[itemIndex].cartQuantity += 1;
-        toast.success(`زيادة كمية ${action.payload.title}`);
+
+        toast.success(`تمت زيادة كمية المنتج`);
       }
       localStorage.setItem("cart", JSON.stringify(state.cartItems));
     },
@@ -63,17 +64,24 @@ const CartSlice = createSlice({
         (item) => item.id === action.payload.id && item.size === action.payload.size
       );
 
-      if (state.cartItems[itemIndex].cartQuantity > 1) {
-        state.cartItems[itemIndex].cartQuantity -= 1;
-        toast.success(`تقليل كمية ${action.payload.title}`);
+      if (itemIndex >= 0) {
+        if (state.cartItems[itemIndex].cartQuantity > 1) {
+          state.cartItems[itemIndex].cartQuantity -= 1;
+          toast.success(`تم تقليل كمية المنتج`);
+        } else {
+          const updatedCartItems = state.cartItems.filter(
+            (item) => !(item.id === action.payload.id && item.size === action.payload.size)
+          );
+          state.cartItems = updatedCartItems;
+          toast.success(`تمت إزالة المنتج من السلة`);
+        }
       }
       localStorage.setItem("cart", JSON.stringify(state.cartItems));
     },
 
-    setClearCartItems: (state, action) => {
+    setClearCartItems: (state) => {
       state.cartItems = [];
-      toast.success(`Cart Cleared`);
-      localStorage.setItem("cart", JSON.stringify(state.cartItems));
+      localStorage.setItem("cart", JSON.stringify([]));
     },
 
     setGetTotals: (state, action) => {
