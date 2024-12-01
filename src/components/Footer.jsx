@@ -8,7 +8,7 @@ const Footer = ({ footerAPI: { titles, links } }) => {
   }, []);
   return (
    <>
-      <footer className='bg-theme pt-7 pb-5'>
+      <footer className='bg-theme pt-7 pb-5 rtl'>
         <div className='nike-container text-slate-200'>
           <div className='grid items-start grid-cols-3 max-w-2xl w-full m-auto md:max-w-none md:gap-5'>
             {titles.map((val, i) => (
@@ -19,13 +19,15 @@ const Footer = ({ footerAPI: { titles, links } }) => {
             {links.map((list, i) => (
               <ul key={i} className="grid items-center gap-1">
                 {list.map((link, i) => (
-                  <li key={i} className="text-sm sm:text-xs">{link.link}</li>
+                  <li key={i} className="text-sm sm:text-xs">
+                    <a href='#' className='hover:text-slate-100'>{link.link}</a>
+                  </li>
                 ))}
               </ul>
             ))}
           </div>
           <div className='mt-5 text-center'>
-            <p className='text-sm md:text-center'>Copyright<sup className='text-base font-bold'>&copy;</sup> All Reserved Rights <span className='font-semibold'>JSSTACK DEVELOPERS {Year}</span></p>
+            <p className='text-sm md:text-center'>حقوق النشر<sup className='text-base font-bold'>&copy;</sup> جميع الحقوق محفوظة لمتجر نايكي {Year}</p>
           </div>
         </div>
       </footer>

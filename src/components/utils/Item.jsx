@@ -1,7 +1,6 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-
+import React, { useState } from 'react';
 import { StarIcon, ShoppingBagIcon } from "@heroicons/react/24/solid";
+import { useDispatch } from "react-redux";
 import { setAddItemToCart, setOpenCart } from "../../app/CartSlice";
 
 const Item = ({
@@ -16,20 +15,21 @@ const Item = ({
   rating,
   price,
 }) => {
-  //   console.log(id)
   const dispatch = useDispatch();
+  const [selectedSize, setSelectedSize] = useState('40');
+  const sizes = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];
 
   const onAddToCart = () => {
-    const item = { id, title, text, img, color, shadow, price };
+    const item = { id, title, text, img, color, shadow, price, size: selectedSize };
 
     dispatch(setAddItemToCart(item));
   };
 
   const onCartToggle = () => {
     dispatch(setOpenCart({
-        cartState: true
+      cartState: true
     }))
-}
+  };
 
   return (
     <>
@@ -51,7 +51,7 @@ const Item = ({
           </p>
 
           <div className="flex items-center justify-between w-28 my-2">
-            <div className="flex items-center bg-white/80  px-1 rounded blur-effect-theme">
+            <div className="flex items-center bg-white/80 px-1 rounded blur-effect-theme">
               <h1 className="text-black text-sm font-medium">${price}</h1>
             </div>
             <div className="flex items-center gap-1">
@@ -62,31 +62,45 @@ const Item = ({
             </div>
           </div>
 
+          {/* Size Selector */}
+          <div className="flex items-center gap-2 my-2">
+            <select 
+              value={selectedSize} 
+              onChange={(e) => setSelectedSize(e.target.value)}
+              className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 bg-white/80"
+            >
+              {sizes.map((size) => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
+
           <div className="flex items-center gap-3">
             <button
               type="button"
               className="bg-white/90 blur-effect-theme button-theme p-0.5 shadow shadow-sky-200"
-              onClick={()=> onAddToCart()}
+              onClick={() => onAddToCart()}
+              title="إضافة إلى السلة"
             >
               <ShoppingBagIcon className="icon-style text-slate-900" />
             </button>
             <button
               type="button"
               className="bg-white/90 blur-effect-theme button-theme px-2 py-1 shadow shadow-sky-200 text-sm text-black"
-              onClick={()=> {onAddToCart(); onCartToggle();}}
+              onClick={() => {onAddToCart(); onCartToggle();}}
             >
-              {btn}
+              {btn || "اشتري الآن"}
             </button>
           </div>
         </div>
         <div
           className={`flex items-center ${
-            ifExists ? "absolute top-5 right-1" : "justify-center"
+            ifExists ? "absolute top-5 left-1" : "justify-center"
           }`}
         >
           <img
             src={img}
-            alt={`img/item-img/${id}`}
+            alt={`صورة-المنتج/${id}`}
             className={`transitions-theme hover:-rotate-12 ${
               ifExists
                 ? "h-auto w-64 lg:w-56 md:w-48 -rotate-[35deg]"
